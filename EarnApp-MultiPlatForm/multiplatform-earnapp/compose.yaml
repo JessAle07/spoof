@@ -1,0 +1,24 @@
+services:
+  worker:
+    image: multiplatform-earnapp:latest
+    build: .
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 10s
+    environment:
+      EDGE_DATA_DIR: /data
+      EARNAPP_CLIENT: ${EARNAPP_CLIENT:-tizen}
+      EARNAPP_VERSION_MODE: ${EARNAPP_VERSION_MODE:-reference}
+      EARNAPP_SPOOF_CONFIG: /app/spoof_config.json
+      EDGE_CONSENT: "1"
+    volumes:
+      - ./data:/data
+      - ./config.json:/app/config.json:ro
+      - ./spoof_config.json:/app/spoof_config.json:ro
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    # Optional: cpus: 0.5 (half of one CPU core)
+    # mem_limit: 512m

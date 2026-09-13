@@ -1,0 +1,22 @@
+{
+  "appid": "node_earnapp.com",
+  "partnerid": "luminati",
+  "handshake": {
+    "arch": "armv7l",
+    "release": "5.5.0",
+    "platform": "tizen",
+    "version": "1.651.510",
+    "cid": null,
+    "old_cid": null,
+    "is_tv": true,
+    "appid": "28-ec3e-e20e-f89d",
+    "partnerid": "luminati",
+    "uuid": "sdk-tizen-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "type": "wired",
+    "ifname": "eth0",
+    "usage": {},
+    "consent_ts": null,
+    "last_rmt_upd_success": null,
+    "vpn_profile_enabled": false
+  }
+}
