@@ -1,7 +1,0 @@
-{
-  "appid": "node_earnapp.com",
-  "debug": true,
-  "log_file": "sdk.log",
-  "watch_status_file": false,
-  "partnerid": "luminati"
-}
