@@ -1,4 +1,4 @@
-EARNAPP LAUNCHER — DNS 443 / COMPATIBLE APPARMOR EDITION
+ LAUNCHER — DNS 443 / COMPATIBLE APPARMOR EDITION
 ================================================
 This package has dashboard options 16, 17 and 18. If you do not see them, you are
 running another copy of earnapp-launcher.sh. The dashboard prints its folder.
