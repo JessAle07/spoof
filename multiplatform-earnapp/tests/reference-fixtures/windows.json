@@ -1,0 +1,22 @@
+{
+  "appid": "node_earnapp.com",
+  "partnerid": "luminati",
+  "handshake": {
+    "arch": "x64",
+    "release": "10.0.22631",
+    "platform": "node",
+    "version": "1.651.510",
+    "cid": null,
+    "old_cid": null,
+    "is_tv": false,
+    "appid": "f5-ecd7-94cb-3556",
+    "partnerid": "luminati",
+    "uuid": "sdk-node-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "type": "wired",
+    "ifname": "Ethernet",
+    "usage": {},
+    "consent_ts": null,
+    "last_rmt_upd_success": null,
+    "vpn_profile_enabled": false
+  }
+}

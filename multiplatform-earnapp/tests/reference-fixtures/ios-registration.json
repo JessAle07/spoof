@@ -1,0 +1,14 @@
+{
+  "endpoint": "https://client.earnapp.com/install_device",
+  "params": {
+    "uuid": "sdk-node-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "version": "1.651.510",
+    "arch": "arm64",
+    "appid": "node_earnapp.com",
+    "os": "iOS"
+  },
+  "method": "POST",
+  "body": {
+    "serial": "cccccccccccccccccccccccccccccccccccccccc"
+  }
+}

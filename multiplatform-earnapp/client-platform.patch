@@ -1,0 +1,106 @@
+--- original/client.js
++++ sdk/client.js
+@@ -47,6 +47,7 @@
+ const {Stream_udp} = udp_stream;
+ const sleep = ms=>new Promise(r=>setTimeout(r, ms));
+ const {ver_conf, get_rand_elm} = util;
++const reported_version = ()=>ver_conf.reported_version || zon_config.ZON_VERSION;
+ const E = exports;
+ const ms = date.ms;
+ const env = process.env;
+@@ -659,10 +660,10 @@
+         zerr('jscid read err '+zerr.e2s(e));
+     }
+     const res = {
+-        arch: os.arch(),
+-        release: get_release(),
++        arch: ver_conf.arch || ver_conf.device_profile?.arch || 'x64',
++        release: ver_conf.release || ver_conf.device_profile?.release || 'unknown',
+         platform: ver_conf.tv_platform || 'node',
+-        version: zon_config.ZON_VERSION,
++        version: reported_version(),
+         cid,
+         old_cid,
+         is_tv: ver_conf.is_tv,
+@@ -670,8 +671,8 @@
+             ver_conf.tv_platform||'node'),
+         partnerid: ver_conf.partnerid,
+         uuid,
+-        type: info && info.type,
+-        ifname: info && info.name,
++        type: ver_conf.iftype || ver_conf.device_profile?.iftype || info && info.type,
++        ifname: ver_conf.ifname || ver_conf.device_profile?.ifname || info && info.name,
+         usage: {},
+         consent_ts,
+         last_rmt_upd_success: read_last_rmt_upd_success(),
+@@ -1293,7 +1294,12 @@
+     zerr.notice(`proxyjs_client_conn ${name} ${addr} ${ip}:${port}`+
+         `(${servername}) ${util.print_zagent(proxy)}`);
+     let agent, proxy_opt;
+-    if (proxy)
++    if (ver_conf.proxy)
++    {
++        const {SocksProxyAgent} = require('socks-proxy-agent');
++        agent = new SocksProxyAgent(ver_conf.proxy);
++    }
++    else if (proxy)
+     {
+         proxy.headers = Object.assign({
+             'x-uuid': uuid,
+@@ -1438,19 +1444,6 @@
+ };
+ let net_mon;
+ const start_monitor_devs = ()=>{
+-    if (!process.env.IS_TIZEN)
+-    {
+-        if (ver_conf.tv_platform=='webos')
+-        {
+-            net_mon = require('./net_mon.js');
+-            net_mon.start_monitoring(ev=>{
+-                zerr.notice('network state changed %O', ev);
+-                check_devs();
+-            });
+-            check_devs(); // initial check
+-            return {return: ()=>{}};
+-        }
+-    }
+     const interval = ms.SEC;
+     let running = true;
+     (async()=>{
+@@ -1657,7 +1650,7 @@
+     zerr.perr_install(perr.install(conf));
+     web_request.init({
+         uuid,
+-        version: zon_config.ZON_VERSION,
++        version: reported_version(),
+         lum_zagent_ports_ssl: sdk_conf.lum_zagent_ports_ssl,
+         lum_zagent_ips_ssl: sdk_conf.lum_zagent_ips_ssl,
+         lum_zagent_domains: sdk_conf.lum_zagent_domains,
+@@ -1722,7 +1715,8 @@
+ E.start = ()=>{
+     zerr.notice('run: E.start()');
+     started = true;
+-    monitor_et = start_monitor_devs();
++    if (!monitor_et)
++        monitor_et = start_monitor_devs();
+ };
+ 
+ const get_consent_file = ()=>`${ver_conf.confdir}/consent`;
+@@ -1858,7 +1852,7 @@
+     return {
+         consent: consent_ts && !!consent_status,
+         step,
+-        ver: zon_config.ZON_VERSION,
++        ver: reported_version(),
+         uuid,
+         tracking_id,
+     };
+@@ -1866,7 +1860,7 @@
+ 
+ E.get_server_sdk_conf = async()=>{
+     var qs = {appid: alias.compute(ver_conf.appid,
+-        ver_conf.tv_platform||'node'), ver: zon_config.ZON_VERSION};
++        ver_conf.tv_platform||'node'), ver: reported_version()};
+     const res = await web_request.get(sdk_conf.lum_clientsdk_domains,
+         sdk_conf.sdk_conf_path, qs);
+     if (res && res.status==200)
